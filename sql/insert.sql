@@ -1,13 +1,13 @@
 USE couse
 
-INSERT INTO TypeUser (typeName, typeId) 
+INSERT INTO TypeOfUser (typeName, typeId) 
     VALUES  
         ('Employee', 1),
         ('Leaders', 2),
         ('Admin', 3);
 
 INSERT INTO 
-        User (name, login, pass, userTypeId) 
+        Users (name, login, pass, userTypeId) 
     VALUES 
         ('Petro', 'prt33', 'asdfasdf1', 1),
         ('Slava', 'slvp32', 'asdfasdf2', 1),
