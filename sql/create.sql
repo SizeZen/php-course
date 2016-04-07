@@ -1,0 +1,27 @@
+USE couse
+
+CREATE TABLE User (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    login VARCHAR(64) NOT NULL,
+    pass VARCHAR(64) NOT NULL,
+    userTypeId INT NOT NULL
+);
+CREATE TABLE TypeUser (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    typeName VARCHAR(64) NOT NULL,
+    typeId INT NOT NULL
+);
+CREATE TABLE LeadersEmployee (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    employeeId INT NOT NULL,
+    LeaderId INT NOT NULL
+);
+CREATE TABLE EmployeeSaraly (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    salary INT NOT NULL,
+    employeeId INT NOT NULL
+);
+
+
+
