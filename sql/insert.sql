@@ -1,6 +1,7 @@
 USE couse
 
-INSERT INTO TypeOfUser (typeName, typeId) 
+INSERT INTO 
+        TypeOfUser (typeName, typeId) 
     VALUES  
         ('Employee', 1),
         ('Leaders', 2),
@@ -19,3 +20,8 @@ INSERT INTO
     VALUES 
         (1, 3),
         (2, 3);
+
+INSERT INTO
+        EmployeeSaraly (salary, employeeId, leaderId)
+    VALUES
+        (1000, 1, 3);

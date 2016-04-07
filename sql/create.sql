@@ -1,3 +1,5 @@
+CREATE DATABASE couse;
+
 USE couse
 
 CREATE TABLE Users (
@@ -20,7 +22,9 @@ CREATE TABLE LeadersEmployee (
 CREATE TABLE EmployeeSaraly (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     salary INT NOT NULL,
-    employeeId INT NOT NULL
+    employeeId INT NOT NULL,
+    leaderId INT NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
