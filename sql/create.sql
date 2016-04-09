@@ -7,7 +7,8 @@ CREATE TABLE Users (
     name VARCHAR(64) NOT NULL,
     login VARCHAR(64) NOT NULL,
     pass VARCHAR(64) NOT NULL,
-    userTypeId INT NOT NULL
+    userTypeId INT NOT NULL,
+    isFired TINYINT(1) DEFAULT 0
 );
 CREATE TABLE TypeOfUser (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +18,7 @@ CREATE TABLE TypeOfUser (
 CREATE TABLE LeadersEmployee (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     employeeId INT NOT NULL,
-    LeaderId INT NOT NULL
+    leaderId INT NOT NULL
 );
 CREATE TABLE EmployeeSaraly (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
