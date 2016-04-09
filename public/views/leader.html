@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><span class="label label-primary">Сouse</span></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container"> 
+    {{employeeId}}
+    <div class="panel panel-default">
+      <div class="panel-heading">Привіт {{ leaderName }} <span class="label label-warning">Керівник</span></div>
+      <div class="panel-body">
+        <div class="btn-group" role="group">
+          {% if employeeName %}
+          <button type="button" class="btn btn-default">Інформація про виплати для працівника {{ employeeName }}</button>
+          {% endif %}
+          <div class="btn-group dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropmenu" data-toggle="dropdown">Список підлеглих працівників
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropmenu">
+            {% for item in  employees %}
+              <li role="presentation"><a role="menuitem"  href="/leader/{{ item.name }}">{{ item.name }}</a></li>
+            {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% if salaryData|length > 0 %}
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Виплата</th>
+            <th>Дата</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in  salaryData %}
+            <tr>
+              <td>{{ item.salary }}</td>
+              <td>{{ item.date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+        {% elseif employeeName %}
+        <div class="alert alert-info" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Записів не існує (не було здійснено жодної виплати)
+        </div>
+      {% endif %}
+      </div>
+      {% if employeeName %}
+        <div class="panel-footer">
+          <button class="btn btn-success">Додати виплату</button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
