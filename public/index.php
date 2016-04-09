@@ -22,6 +22,7 @@ $container['view'] = $container['view'] = function ($container) {
     ));
     return $view;
 };
+
 $app->get('/', function (Request $request, Response $response) {
     if(!auth\is_auth()) {
         return $response->withHeader('Location', '/login');
@@ -32,13 +33,19 @@ $app->get('/', function (Request $request, Response $response) {
         return $response->withHeader('Location', $url);
     }
 });
+
 $app->get('/login', function (Request $request, Response $response) {
+    if(auth\is_auth()) {
+        return $response->withHeader('Location', '/');
+    }
     return $this->view->render($response, "login.html");
 });
+
 $app->get('/logout', function (Request $request, Response $response) {
     auth\logout_session();
     return $response->withHeader('Location', '/');
 });
+
 $app->post('/login', function (Request $request, Response $response) {
     $login = $request->getParsedBody()['inputLogin'];
     $pass = $request->getParsedBody()['inputPassword'];
@@ -52,12 +59,14 @@ $app->post('/login', function (Request $request, Response $response) {
             if($user['userTypeId'] == 1) { $url = '/employee'; }
             if($user['userTypeId'] == 2) { $url = '/leader'; }
             if($user['userTypeId'] == 3) { $url = '/admin'; }
+
             return $response->withHeader('Location', $url);
         }
     }
 
-    return $this->view->render($response, "login.html");
+    return $this->view->render($response, "login.html", ["error" => "something went wrong"]);
 });
+
 $app->get('/employee', function (Request $request, Response $response) {
     $User = new models\User\User();
     $Salary = new models\Salary\Salary();
@@ -83,6 +92,7 @@ $app->get('/employee', function (Request $request, Response $response) {
         "userName"   => $userName
     ]);
 });
+
 $app->get('/leader[/{employee}]', function (Request $request, Response $response) {
     $User = new models\User\User();
     $Salary = new models\Salary\Salary();
@@ -121,6 +131,7 @@ $app->get('/leader[/{employee}]', function (Request $request, Response $response
     
     return $this->view->render($response, "leader.html", $resultData);
 });
+
 $app->get('/admin[/{userType}]', function (Request $request, Response $response) {
     $User = new models\User\User();
     $Salary = new models\Salary\Salary();
@@ -155,6 +166,7 @@ $app->get('/admin[/{userType}]', function (Request $request, Response $response)
     return $this->view->render($response, "admin.html", $resultData);
 
 });
+
 $app->post('/api/addUser', function (Request $request, Response $response) {
     $User = new models\User\User();
 
@@ -177,6 +189,7 @@ $app->post('/api/addUser', function (Request $request, Response $response) {
                     ->withHeader('Content-Type', 'text/html')
                     ->write('Success');
 });
+
 $app->post('/api/fireUser', function (Request $request, Response $response) {
     $User = new models\User\User();
 
@@ -194,6 +207,7 @@ $app->post('/api/fireUser', function (Request $request, Response $response) {
                     ->withHeader('Content-Type', 'text/html')
                     ->write('Success');
 });
+
 $app->post('/api/acceptUser', function (Request $request, Response $response) {
     $User = new models\User\User();
 
@@ -210,6 +224,7 @@ $app->post('/api/acceptUser', function (Request $request, Response $response) {
                     ->withHeader('Content-Type', 'text/html')
                     ->write('Success');
 });
+
 $app->post('/api/updateUser', function (Request $request, Response $response) {
     $User = new models\User\User();
 
