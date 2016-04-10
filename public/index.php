@@ -178,7 +178,7 @@ $app->post('/api/addUser', function (Request $request, Response $response) {
     $json = $request->getBody();
     $data = json_decode($json, true);
 
-    if($User->isExistLogin($data['userlogin']) || empty($data['username'])) {
+    if($User->isExistLogin($data['userlogin']) || empty($data['username']) || empty($data['userlogin']))  {
         return $response->withStatus(500)
                         ->withHeader('Content-Type', 'text/html')
                         ->write('Something went wrong!');
@@ -235,6 +235,12 @@ $app->post('/api/updateUser', function (Request $request, Response $response) {
 
     $json = $request->getBody();
     $data = json_decode($json, true);
+
+    if(empty($data['username']) || empty($data['userid'])) {
+        return $response->withStatus(500)
+                ->withHeader('Content-Type', 'text/html')
+                ->write('Something went wrong!');
+    }
 
     $User->updateUser($data);
 

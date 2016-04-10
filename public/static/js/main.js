@@ -61,6 +61,12 @@ $(document).ready(function(){
         .done(function(data, status, xhr) {
             location.reload();
         })
+        .fail(function(data, status, xhr) {
+            var responseInfo = $('#responseUpdateWorkerInfo');
+            responseInfo.removeClass();
+            responseInfo.addClass('text-danger');
+            responseInfo.html("Не правильні дані");
+        }); 
     });
     $('#addEmployeeSalary').click(function(e) {
         var data = {
