@@ -52,7 +52,7 @@ $app->post('/login', function (Request $request, Response $response) {
 
     $User = new models\User\User();
 
-    if($User->isExistLogin($login)) {
+    if($User->isExistLogin($login) && !$User->isFired($login)) {
         $user = $User->getUsersByLogin($login);
         if($user['pass'] == $pass) {
             auth\login_session($user['id'], $user['userTypeId']);
@@ -202,7 +202,11 @@ $app->post('/api/fireUser', function (Request $request, Response $response) {
     $data = json_decode($json, true);
 
     $User->fireUser($data['id']);
-    $User->deleteLeader($data['id']);
+    if($data['id'] == 1) {
+        $User->deleteEmployee($data['id']);
+    } elseif ($data['id'] == 2) {
+        $User->deleteLeader($data['id']);
+    }
 
     return $response->withStatus(201)
                     ->withHeader('Content-Type', 'text/html')
@@ -272,6 +276,5 @@ $app->post('/api/addSalary', function (Request $request, Response $response) {
     return $response->withStatus(201)
                 ->withHeader('Content-Type', 'text/html')
                 ->write('Success');
-
 });
 $app->run();

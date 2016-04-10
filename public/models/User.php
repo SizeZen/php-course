@@ -85,6 +85,20 @@ class User
 
         return false; 
     }
+    public function isFired($login) {
+        $selectStatement = $this->pdo->select(['isFired'])
+                                     ->from('Users')
+                                     ->Where('login', '=', $login);
+
+        $stmt = $selectStatement->execute();
+        $data = $stmt->fetch();
+
+        if ($data['isFired'] == 1) {
+            return true;
+        }
+
+        return false; 
+    }
     public function fireUser($id) {
         $insertStatement = $this->pdo->update()
                            ->set(array('isFired' => 1))
@@ -99,10 +113,16 @@ class User
                            ->where('id', '=', $id);
         $insertStatement->execute(false);
     }
-    public function deleteLeader($leaderId) {
+    public function deleteLeader($employeeId) {
         $insertStatement = $this->pdo->delete()
                            ->from('LeadersEmployee')
-                           ->where('leaderId', '=', $leaderId);
+                           ->where('employeeId', '=', $employeeId);
+        $insertStatement->execute(false);
+    }
+    public function deleteEmployee($employeeId) {
+        $insertStatement = $this->pdo->delete()
+                           ->from('LeadersEmployee')
+                           ->where('employeeId', '=', $employeeId);
         $insertStatement->execute(false);
     }
     public function updateUser($data) {
