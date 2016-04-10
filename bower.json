@@ -1,0 +1,17 @@
+{
+  "name": "couse",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "SizeZen <ivadimdobrydnyk@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/SizeZen/php-course",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
