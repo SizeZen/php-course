@@ -105,16 +105,16 @@ $app->get('/leader[/{employee}]', function (Request $request, Response $response
     
     $resultData = [];
 
-    $employeeName = $request->getAttribute('employee');
+    $employeeLogin = $request->getAttribute('employee');
 
-    if(!empty($employeeName)) {
-        $employeeId = $User->getUserIdByName($employeeName);
+    if(!empty($employeeLogin)) {
+        $employee = $User->getUsersByLogin($employeeLogin);
     
-        if(empty($employeeId)) {
+        if(empty($employee['id'])) {
            return $response->withHeader('Location', '/leader');
         }
 
-        $salaryModel = $Salary->getSalaryByEmpoyeeIdLeaderId($employeeId, $leaderId);
+        $salaryModel = $Salary->getSalaryByEmpoyeeIdLeaderId($employee['id'], $leaderId);
         
         $salaryData = [];
         foreach ($salaryModel as $value) {
@@ -122,7 +122,8 @@ $app->get('/leader[/{employee}]', function (Request $request, Response $response
             $tmp["date"] = $value["date"];
             array_push($salaryData, $tmp);
         }
-        $resultData['employeeName'] = $employeeName;
+
+        $resultData['employee'] = $employee;
         $resultData['salaryData'] = $salaryData;
     }
     $resultData['employees'] = $User->getUsersByLeaderId($leaderId);
@@ -240,5 +241,31 @@ $app->post('/api/updateUser', function (Request $request, Response $response) {
     return $response->withStatus(201)
                     ->withHeader('Content-Type', 'text/html')
                     ->write('Success');
+});
+
+$app->post('/api/addSalary', function (Request $request, Response $response) {
+    $Salary = new models\Salary\Salary();
+
+    if(!auth\check_user(2)) {
+        return $response->withHeader('Location', '/');
+    }
+
+    $json = $request->getBody();
+    $data = json_decode($json, true);
+
+    if(!is_numeric($data['employeesalary'])) {
+        return $response->withStatus(500)
+                ->withHeader('Content-Type', 'text/html')
+                ->write('Something went wrong!');
+    }
+
+    $data['leaderid'] = $_SESSION['userid'];
+
+    $Salary->addSalary($data);
+
+    return $response->withStatus(201)
+                ->withHeader('Content-Type', 'text/html')
+                ->write('Success');
+
 });
 $app->run();

@@ -24,4 +24,13 @@ class Salary
         $stmt = $selectStatement->execute();
         return $stmt->fetchAll();
     }
+    public function addSalary($data) {
+        $insertStatement = $this->pdo->insert(array('salary', 'employeeId', 'leaderId'))
+                                     ->into('EmployeeSaraly')
+                                     ->values(array(
+                                                    $data['employeesalary'],
+                                                    $data['employeeid'],
+                                                    $data['leaderid'] ));
+        $insertStatement->execute(false);
+    }
 }

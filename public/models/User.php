@@ -40,7 +40,7 @@ class User
         return $res['id'];
     }
     public function getUsersByLeaderId($leaderId) {
-        $selectStatement = $this->pdo->select(['Users.id', 'Users.name'])
+        $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
                                      ->from('Users')
                                      ->leftJoin('LeadersEmployee', 'LeadersEmployee.employeeId', '=', 'Users.id')
                                      ->where('LeadersEmployee.leaderId', '=', $leaderId);

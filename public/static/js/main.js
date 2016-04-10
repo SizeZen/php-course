@@ -25,7 +25,6 @@ $(document).ready(function(){
         var data = {
             "id": $(e.currentTarget).parent().parent().get(0).firstElementChild.innerHTML
         };
-        console.log(data);
 
         data = JSON.stringify(data);
         $.post('/api/fireUser', data)
@@ -37,7 +36,6 @@ $(document).ready(function(){
         var data = {
             "id": $(e.currentTarget).parent().parent().get(0).firstElementChild.innerHTML
         };
-        console.log(data);
 
         data = JSON.stringify(data);
         $.post('/api/acceptUser', data)
@@ -45,12 +43,10 @@ $(document).ready(function(){
             location.reload();
         })
     });
-    $('.updateUser').click(function(e){
+    $('.updateUser').click(function(e) {
         var id = $(e.currentTarget).parent().parent().get(0).children[0].innerHTML;
         var name = $(e.currentTarget).parent().parent().get(0).children[1].innerHTML;
 
-        console.log(id)
-        console.log(name)
         $('#UpdateWorker .userid').val(id)
         $('#UpdateWorker .username').val(name)
     });
@@ -65,5 +61,23 @@ $(document).ready(function(){
         .done(function(data, status, xhr) {
             location.reload();
         })
+    });
+    $('#addEmployeeSalary').click(function(e) {
+        var data = {
+            "employeeid": $("[name='inputEmployeeId']").val(),
+            "employeesalary": $("[name='inputEmployeeSalary']").val()
+        };
+        console.log(data);
+        data = JSON.stringify(data);
+        $.post('/api/addSalary', data)
+        .done(function(data, status, xhr) {
+            location.reload();
+        })
+        .fail(function(data, status, xhr) {
+            var responseInfo = $('#responseinfo');
+            responseInfo.removeClass();
+            responseInfo.addClass('text-danger');
+            responseInfo.html("Не правильні дані");
+        }); 
     });
 });
