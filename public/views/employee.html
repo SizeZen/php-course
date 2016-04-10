@@ -32,6 +32,7 @@
       <div class="panel-body">
         <h3>Інформація про виплати</h3>
       </div>
+      {% if salaryData|length > 0 %}
       <table class="table table-condensed">
         <thead>
           <tr>
@@ -50,6 +51,13 @@
         {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Записів не існує (не було здійснено жодної виплати)
+        </div>
+      {% endif %}
     </div>
   </div>
 </body>
