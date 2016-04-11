@@ -39,11 +39,29 @@ class User
         $res = $stmt->fetch();
         return $res['id'];
     }
+    public function getUsersIndependentLeaderId($leaderId) {
+        $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
+                                     ->from('Users')
+                                     ->leftJoin('LeadersEmployee', 'LeadersEmployee.employeeId', '=', 'Users.id')
+                                     ->where('LeadersEmployee.leaderId', '<>', $leaderId);
+
+        $stmt = $selectStatement->execute();
+        return $stmt->fetchAll();
+    }
     public function getUsersByLeaderId($leaderId) {
         $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
                                      ->from('Users')
                                      ->leftJoin('LeadersEmployee', 'LeadersEmployee.employeeId', '=', 'Users.id')
                                      ->where('LeadersEmployee.leaderId', '=', $leaderId);
+
+        $stmt = $selectStatement->execute();
+        return $stmt->fetchAll();
+    }
+    public function getLeadersByEmployeeId($employeeId) {
+        $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
+                                     ->from('Users')
+                                     ->leftJoin('LeadersEmployee', 'LeadersEmployee.leaderId', '=', 'Users.id')
+                                     ->where('LeadersEmployee.employeeId', '=', $employeeId);
 
         $stmt = $selectStatement->execute();
         return $stmt->fetchAll();
@@ -69,6 +87,12 @@ class User
         $insertStatement = $this->pdo->insert(array('name', 'login', 'userTypeId', 'pass'))
                            ->into('Users')
                            ->values(array($data['username'], $data['userlogin'], $data['usertype'], '12345'));
+        $insertStatement->execute(false);
+    }
+    public function addEmployeeLeader($data) {
+        $insertStatement = $this->pdo->insert(array('leaderId', 'employeeId'))
+                                     ->into('LeadersEmployee')
+                                     ->values(array($data['leaderid'], $data['employeeId']));
         $insertStatement->execute(false);
     }
     public function isExistLogin($login) {
@@ -130,5 +154,11 @@ class User
                            ->table('Users')
                            ->where('id', '=', $data['userid']);
         $insertStatement->execute(false);
+    }
+    public function updateUserPass($newPass, $id) {
+        $updateStatement = $this->pdo->update(array('pass' => $newPass))
+                                     ->table('Users')
+                                     ->where('id', '=', $id);
+        $updateStatement->execute(false);                            
     }
 }

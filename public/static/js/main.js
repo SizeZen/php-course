@@ -86,4 +86,23 @@ $(document).ready(function(){
             responseInfo.html("Не правильні дані");
         }); 
     });
+    $('#updatePassword').click(function(e) {
+        var data = {
+            "oldpass": $("[name='oldpass']").val(),
+            "newpass": $("[name='newpass']").val()
+        };
+        console.log(data);
+        data = JSON.stringify(data);
+        $.post('/api/resetPass', data)
+        .done(function(data, status, xhr) {
+            location.reload();
+        })
+        .fail(function(data, status, xhr) {
+            var responseInfo = $('#responseUpdatePasswordInfo');
+            responseInfo.removeClass();
+            responseInfo.addClass('text-danger');
+            responseInfo.html("Не правильні дані");
+        }); 
+
+    });
 });

@@ -56,11 +56,7 @@ $app->post('/login', function (Request $request, Response $response) {
         $user = $User->getUsersByLogin($login);
         if($user['pass'] == $pass) {
             auth\login_session($user['id'], $user['userTypeId']);
-            if($user['userTypeId'] == 1) { $url = '/employee'; }
-            if($user['userTypeId'] == 2) { $url = '/leader'; }
-            if($user['userTypeId'] == 3) { $url = '/admin'; }
-
-            return $response->withHeader('Location', $url);
+            return $response->withHeader('Location', '/');
         }
     }
 
@@ -86,11 +82,12 @@ $app->get('/employee', function (Request $request, Response $response) {
         $tmp["date"] = $value["date"];
         $tmp["leaderName"] = $User->getUserNameById($value["leaderId"]);
         array_push($salaryData, $tmp);
+        
+        $data["salaryData"] = $salaryData;
+        $data["userName"] = $userName;
+        $data["leaders"] = $User->getLeadersByEmployeeId($userid);
     }
-    return $this->view->render($response, "employee.html", [
-        "salaryData" => $salaryData,
-        "userName"   => $userName
-    ]);
+    return $this->view->render($response, "employee.html", $data);
 });
 
 $app->get('/leader[/{employee}]', function (Request $request, Response $response) {
@@ -125,7 +122,10 @@ $app->get('/leader[/{employee}]', function (Request $request, Response $response
 
         $resultData['employee'] = $employee;
         $resultData['salaryData'] = $salaryData;
+
     }
+    $resultData['allEmployees'] = $User->getUsersIndependentLeaderId($leaderId);
+    
     $resultData['employees'] = $User->getUsersByLeaderId($leaderId);
 
     $resultData['leaderName'] = $User->getUserNameById($leaderId);
@@ -276,5 +276,49 @@ $app->post('/api/addSalary', function (Request $request, Response $response) {
     return $response->withStatus(201)
                 ->withHeader('Content-Type', 'text/html')
                 ->write('Success');
+});
+
+$app->post('/api/addEmployeeLeader', function (Request $request, Response $response) {
+    $User = new models\User\User();
+
+    if(!auth\check_user(2)) {
+        return $response->withHeader('Location', '/');
+    }
+
+    $json = $request->getBody();
+    $data = json_decode($json, true);
+
+    $data['leaderid'] = $_SESSION['userid'];
+
+    $User->addEmployeeLeader($data);
+
+    return $response->withStatus(201)
+                ->withHeader('Content-Type', 'text/html')
+                ->write('Success');
+});
+
+$app->post('/api/resetPass', function (Request $request, Response $response) {
+    $User = new models\User\User();
+
+    $json = $request->getBody();
+    $data = json_decode($json, true);
+
+    if(!auth\is_auth()) {
+        return $response->withHeader('Location', '/');
+    }
+
+    $userId = $_SESSION['userid'];
+
+    $user = $User->getUsersById($userId);
+    if($user['pass'] == $data['oldpass']) {
+        $User->updateUserPass($data['newpass'], $userId);
+
+        return $response->withStatus(201)
+                        ->withHeader('Content-Type', 'text/html')
+                        ->write('Success');    
+    }
+    return $response->withStatus(500)
+                    ->withHeader('Content-Type', 'text/html')
+                    ->write('Something went wrong!');
 });
 $app->run();
