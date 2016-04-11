@@ -107,7 +107,7 @@ $app->get('/leader[/{employee}]', function (Request $request, Response $response
     if(!empty($employeeLogin)) {
         $employee = $User->getUsersByLogin($employeeLogin);
     
-        if(empty($employee['id'])) {
+        if(empty($employee['id']) || !$User->isBelongsEmployee($employee['id'])) {
            return $response->withHeader('Location', '/leader');
         }
 
@@ -320,5 +320,23 @@ $app->post('/api/resetPass', function (Request $request, Response $response) {
     return $response->withStatus(500)
                     ->withHeader('Content-Type', 'text/html')
                     ->write('Something went wrong!');
+});
+$app->post('/api/removeEmployeeLeader', function (Request $request, Response $response) {
+    $User = new models\User\User();
+
+    $json = $request->getBody();
+    $data = json_decode($json, true);
+
+    if(!auth\check_user(2)) {
+        return $response->withHeader('Location', '/');
+    }
+
+    $leaderId = $_SESSION['userid'];
+
+    $User->deleteEmployeeLeader($data['employeeId'], $leaderId);
+
+    return $response->withStatus(201)
+                    ->withHeader('Content-Type', 'text/html')
+                    ->write('Success');    
 });
 $app->run();

@@ -43,7 +43,8 @@ class User
         $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
                                      ->from('Users')
                                      ->leftJoin('LeadersEmployee', 'LeadersEmployee.employeeId', '=', 'Users.id')
-                                     ->where('LeadersEmployee.leaderId', '<>', $leaderId);
+                                     ->whereNull('LeadersEmployee.leaderId')
+                                     ->orWhere('LeadersEmployee.leaderId', '<>', $leaderId);
 
         $stmt = $selectStatement->execute();
         return $stmt->fetchAll();
@@ -149,6 +150,13 @@ class User
                            ->where('employeeId', '=', $employeeId);
         $insertStatement->execute(false);
     }
+    public function deleteEmployeeLeader($employeeId, $leaderId) {
+        $insertStatement = $this->pdo->delete()
+                           ->from('LeadersEmployee')
+                           ->where('employeeId', '=', $employeeId)
+                           ->where('leaderId', '=', $leaderId);
+        $insertStatement->execute(false);
+    }
     public function updateUser($data) {
         $insertStatement = $this->pdo->update(array('name' => $data['username']))
                            ->table('Users')
@@ -160,5 +168,19 @@ class User
                                      ->table('Users')
                                      ->where('id', '=', $id);
         $updateStatement->execute(false);                            
+    }
+    public function isBelongsEmployee($employeeId) {
+        $selectStatement = $this->pdo->select()
+                                     ->from('LeadersEmployee')
+                                     ->Where('employeeId', '=', $employeeId);
+
+        $stmt = $selectStatement->execute();
+        $data = $stmt->fetchAll();
+
+        if (count($data) > 0) {
+            return true;
+        }
+
+        return false; 
     }
 }

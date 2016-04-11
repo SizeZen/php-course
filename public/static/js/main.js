@@ -86,12 +86,21 @@ $(document).ready(function(){
             responseInfo.html("Не правильні дані");
         }); 
     });
+    $('#addEmployee_Leader').click(function(e) {
+        var data = {
+            "employeeId": $("[name='selectedEmployee']").val()
+        };
+        data = JSON.stringify(data);
+        $.post('/api/addEmployeeLeader', data)
+        .done(function(data, status, xhr) {
+            location.reload();
+        });
+    });
     $('#updatePassword').click(function(e) {
         var data = {
             "oldpass": $("[name='oldpass']").val(),
             "newpass": $("[name='newpass']").val()
         };
-        console.log(data);
         data = JSON.stringify(data);
         $.post('/api/resetPass', data)
         .done(function(data, status, xhr) {
@@ -103,6 +112,15 @@ $(document).ready(function(){
             responseInfo.addClass('text-danger');
             responseInfo.html("Не правильні дані");
         }); 
-
+    });
+    $('#removeEmployee').click(function(e) {
+        var data = {
+            "employeeId": $("[name='inputEmployeeId']").val()
+        };
+        data = JSON.stringify(data);
+        $.post('/api/removeEmployeeLeader', data)
+        .done(function(data, status, xhr) {
+            location.reload();
+        })
     });
 });
