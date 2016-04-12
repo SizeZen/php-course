@@ -43,8 +43,8 @@ class User
         $selectStatement = $this->pdo->select(['Users.id', 'Users.name', 'Users.login'])
                                      ->from('Users')
                                      ->leftJoin('LeadersEmployee', 'LeadersEmployee.employeeId', '=', 'Users.id')
-                                     ->whereNull('LeadersEmployee.leaderId')
-                                     ->orWhere('LeadersEmployee.leaderId', '<>', $leaderId);
+                                     ->where('Users.userTypeId', '=', '1')
+                                     ->whereNull('LeadersEmployee.leaderId');
 
         $stmt = $selectStatement->execute();
         return $stmt->fetchAll();

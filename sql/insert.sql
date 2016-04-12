@@ -10,18 +10,21 @@ INSERT INTO
 INSERT INTO 
         Users (name, login, pass, userTypeId) 
     VALUES 
-        ('Petro', 'prt33', 'asdfasdf1', 1),
-        ('Slava', 'slvp32', 'asdfasdf2', 1),
-        ('Vasya', 'vsl43', 'asdfasdf3', 2),
-        ('Vlad', 'vld53', 'asdfasdf4', 3);
+        ('Володимир Кривенко', 'volody33', 'pass1', 1),
+        ('Владислав Глухов', 'vladislav_gluh', 'pass2', 1),
+        ('Тарас Табаков', 'taras', 'pass3', 1),
+        ('Антон Красников', 'anton', 'pass4', 1),
+        ('Руслан Стрижак', 'puslan_strijak', 'pass5', 2),
+        ('Олександр Лієв', 'sasha777', 'pass6', 2),
+        ('Адмін', 'admin', 'pass_admin', 3);
 
 INSERT INTO 
         LeadersEmployee (employeeId, LeaderId) 
     VALUES 
-        (1, 3),
-        (2, 3);
+        (1, 5),
+        (2, 6);
 
 INSERT INTO
         EmployeeSaraly (salary, employeeId, leaderId)
     VALUES
-        (1000, 1, 3);
+        (1000, 1, 5);
